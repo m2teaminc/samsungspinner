@@ -26,7 +26,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private int selected = -1;
     private int selectedColor;
     private int normalColor;
-    private float itemHeight;
 
     public RecyclerViewAdapter(Context mContext) {
         this.mContext = mContext;
@@ -47,26 +46,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new PopupViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_popup, parent, false));
     }
 
-    private float convert2Px(float dp) {
-        Resources r = mContext.getResources();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-    }
-
-    private  float pxFromDp(final float dp) {
-        return dp * mContext.getResources().getDisplayMetrics().density;
-    }
-
-    private float convertDpToPixel(float dp){
-        Resources resources = mContext.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }
 
     @Override
     public void onBindViewHolder(final PopupViewHolder holder, int position) {
         final String content = mItems.get(position);
         holder.tvContent.setText(content);
-        holder.tvContent.setHeight((int) pxFromDp(itemHeight));
         holder.tvContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,10 +81,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setNormalColor(int normalColor) {
         this.normalColor = normalColor;
-    }
-
-    public void setItemHeight(float itemHeight) {
-        this.itemHeight = itemHeight;
     }
 
     interface ItemCallback {

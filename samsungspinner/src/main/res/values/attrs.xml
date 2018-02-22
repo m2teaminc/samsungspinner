@@ -4,7 +4,6 @@
         <attr name="text" format="string" />
         <attr name="selectedColor" format="color" />
         <attr name="normalColor" format="color" />
-        <attr name="itemHeight" format="dimension" />
     </declare-styleable>
 
 </resources>

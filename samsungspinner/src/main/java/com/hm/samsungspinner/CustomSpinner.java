@@ -24,7 +24,6 @@ import java.util.List;
 
 public class CustomSpinner extends RelativeLayout {
 
-    private float itemHeight;
     private TextView tvTitle;
     private RecyclerViewAdapter mAdapter;
     private PopupWindow popupWindow;
@@ -53,7 +52,6 @@ public class CustomSpinner extends RelativeLayout {
         titleText = array.getString(R.styleable.CustomSpinner_text);
         normalColor = array.getColor(R.styleable.CustomSpinner_normalColor, ContextCompat.getColor(context, R.color.black));
         selectedColor = array.getColor(R.styleable.CustomSpinner_selectedColor, ContextCompat.getColor(context, R.color.red));
-        itemHeight = array.getDimension(R.styleable.CustomSpinner_itemHeight, 20f);
         init(context);
         array.recycle();
     }
@@ -84,7 +82,6 @@ public class CustomSpinner extends RelativeLayout {
         mAdapter = new RecyclerViewAdapter(context);
         mAdapter.setSelectedColor(selectedColor);
         mAdapter.setNormalColor(normalColor);
-        mAdapter.setItemHeight(itemHeight);
         mAdapter.setCallback(new RecyclerViewAdapter.ItemCallback() {
             @Override
             public void onItemClicked(int position, String value) {
