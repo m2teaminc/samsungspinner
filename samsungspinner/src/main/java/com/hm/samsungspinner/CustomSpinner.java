@@ -32,6 +32,7 @@ public class CustomSpinner extends RelativeLayout {
     private String titleText;
     private int normalColor;
     private int selectedColor;
+    private DropdownItemCallback mItemCallback;
     private OnClickListener onPopupClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -55,6 +56,10 @@ public class CustomSpinner extends RelativeLayout {
         itemHeight = array.getDimension(R.styleable.CustomSpinner_itemHeight, 20f);
         init(context);
         array.recycle();
+    }
+
+    public void setItemCallback(DropdownItemCallback mItemCallback) {
+        this.mItemCallback = mItemCallback;
     }
 
     private void init(final Context context) {
@@ -86,6 +91,9 @@ public class CustomSpinner extends RelativeLayout {
                 if (popupWindow.isShowing()) popupWindow.dismiss();
                 tvTitle.setText(value);
                 mSelectedPosition = position;
+                if (mItemCallback != null) {
+                    mItemCallback.onItemSelected(position, value);
+                }
             }
         });
 
@@ -103,6 +111,10 @@ public class CustomSpinner extends RelativeLayout {
 
     public void setData(List<String> data) {
         mAdapter.setDropdownData(data);
+    }
+
+    public interface DropdownItemCallback {
+        void onItemSelected(int position, String value);
     }
 
 }
