@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.hm.spinner.MainActivity">
 
-    <com.hm.spinner.CustomSpinner
+    <com.hm.samsungspinner.CustomSpinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
