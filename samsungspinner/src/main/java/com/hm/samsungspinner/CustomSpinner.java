@@ -106,6 +106,21 @@ public class CustomSpinner extends RelativeLayout {
         popupWindow.setOutsideTouchable(true);
     }
 
+    public void setTitleText(String titleText) {
+        this.titleText = titleText;
+        tvTitle.setText(titleText);
+    }
+
+    public void setNormalColor(int normalColor) {
+        this.normalColor = normalColor;
+        mAdapter.setNormalColor(normalColor);
+    }
+
+    public void setSelectedColor(int selectedColor) {
+        this.selectedColor = selectedColor;
+        mAdapter.setSelectedColor(selectedColor);
+    }
+
     public void setData(List<String> data) {
         mAdapter.setDropdownData(data);
     }
