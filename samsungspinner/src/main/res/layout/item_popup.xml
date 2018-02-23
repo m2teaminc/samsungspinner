@@ -9,5 +9,6 @@
     android:textAllCaps="true"
     android:textSize="14dp"
     android:background="?android:selectableItemBackground"
+    android:textColor="?android:textColorSecondary"
     android:textStyle="bold"
     tools:ignore="SpUsage" />

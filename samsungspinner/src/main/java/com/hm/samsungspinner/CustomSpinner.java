@@ -25,12 +25,14 @@ import java.util.List;
 public class CustomSpinner extends RelativeLayout {
 
     private TextView tvTitle;
+    private ImageView ivExpand;
     private RecyclerViewAdapter mAdapter;
     private PopupWindow popupWindow;
     private int mSelectedPosition = -1;
     private String titleText;
     private int normalColor;
     private int selectedColor;
+    private boolean isDarkTheme;
     private DropdownItemCallback mItemCallback;
     private OnClickListener onPopupClickListener = new OnClickListener() {
         @Override
@@ -52,8 +54,15 @@ public class CustomSpinner extends RelativeLayout {
         titleText = array.getString(R.styleable.CustomSpinner_text);
         normalColor = array.getColor(R.styleable.CustomSpinner_normalColor, ContextCompat.getColor(context, R.color.black));
         selectedColor = array.getColor(R.styleable.CustomSpinner_selectedColor, ContextCompat.getColor(context, R.color.red));
+        isDarkTheme = array.getBoolean(R.styleable.CustomSpinner_isDark, false);
         init(context);
         array.recycle();
+    }
+
+    public void setDarkTheme(boolean darkTheme) {
+        isDarkTheme = darkTheme;
+        if (getContext() != null)
+            initTheme(getContext());
     }
 
     public void setItemCallback(DropdownItemCallback mItemCallback) {
@@ -63,15 +72,32 @@ public class CustomSpinner extends RelativeLayout {
     private void init(final Context context) {
         inflate(context, R.layout.custom_spinner, this);
         tvTitle = findViewById(R.id.tv_title);
+        ivExpand = findViewById(R.id.iv_expand);
+
         tvTitle.setText(titleText);
         tvTitle.setTextColor(normalColor);
         tvTitle.setOnClickListener(onPopupClickListener);
 
         initPopup(context);
 
-        ImageView ivExpand = findViewById(R.id.iv_expand);
         ivExpand.setOnClickListener(onPopupClickListener);
         setOnClickListener(onPopupClickListener);
+        // Init theme in the last step when all components are initialized
+        initTheme(context);
+    }
+
+    private void initTheme(Context context) {
+        if (isDarkTheme) {
+            ivExpand.setImageResource(R.drawable.ic_expand_more_white_24dp);
+        } else {
+            ivExpand.setImageResource(R.drawable.ic_expand_more_black_24dp);
+        }
+        mAdapter.setDarkTheme(isDarkTheme);
+        if (isDarkTheme) {
+            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_recycler_view_dark));
+        } else {
+            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_recycler_view));
+        }
     }
 
     private void initPopup(Context context) {
@@ -82,6 +108,7 @@ public class CustomSpinner extends RelativeLayout {
         mAdapter = new RecyclerViewAdapter(context);
         mAdapter.setSelectedColor(selectedColor);
         mAdapter.setNormalColor(normalColor);
+
         mAdapter.setCallback(new RecyclerViewAdapter.ItemCallback() {
             @Override
             public void onItemClicked(int position, String value) {
@@ -101,7 +128,7 @@ public class CustomSpinner extends RelativeLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             popupWindow.setElevation(16f);
         }
-        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_recycler_view));
+
         popupWindow.setContentView(view);
         popupWindow.setOutsideTouchable(true);
     }

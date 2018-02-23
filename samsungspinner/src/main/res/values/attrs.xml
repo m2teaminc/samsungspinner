@@ -4,6 +4,9 @@
         <attr name="text" format="string" />
         <attr name="selectedColor" format="color" />
         <attr name="normalColor" format="color" />
+        <attr name="isDark" format="boolean" />
     </declare-styleable>
-
+    <declare-styleable name="customAttrs">
+        <attr name="dropdownArrow" format="reference" />
+    </declare-styleable>
 </resources>

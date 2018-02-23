@@ -23,5 +23,6 @@ public class MainActivity extends AppCompatActivity {
         datas.add("Danang");
         datas.add("HCM");
         spinner.setData(datas);
+        spinner.setDarkTheme(true);
     }
 }

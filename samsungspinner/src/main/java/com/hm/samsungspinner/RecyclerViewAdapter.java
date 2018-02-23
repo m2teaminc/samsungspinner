@@ -2,6 +2,7 @@ package com.hm.samsungspinner;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -26,6 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private int selected = -1;
     private int selectedColor;
     private int normalColor;
+    private boolean darkTheme;
 
     public RecyclerViewAdapter(Context mContext) {
         this.mContext = mContext;
@@ -58,10 +60,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     mCallback.onItemClicked(holder.getAdapterPosition(), content);
             }
         });
-        if (selected == position) {
-            holder.tvContent.setTextColor(selectedColor);
+
+        if (isDarkTheme()) {
+            holder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            if (selected == position) {
+                holder.tvContent.setTextColor(selectedColor);
+            }
         } else {
-            holder.tvContent.setTextColor(normalColor);
+            holder.tvContent.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+            if (selected == position) {
+                holder.tvContent.setTextColor(selectedColor);
+            } else {
+                holder.tvContent.setTextColor(normalColor);
+            }
         }
     }
 
@@ -81,6 +92,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setNormalColor(int normalColor) {
         this.normalColor = normalColor;
+    }
+
+    public void setDarkTheme(boolean darkTheme) {
+        this.darkTheme = darkTheme;
+        notifyDataSetChanged();
+    }
+
+    public boolean isDarkTheme() {
+        return darkTheme;
     }
 
     interface ItemCallback {
