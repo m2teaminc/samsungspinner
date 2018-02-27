@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -34,15 +35,21 @@ public class CustomSpinner extends RelativeLayout {
     private int selectedColor;
     private boolean isDarkTheme;
     private DropdownItemCallback mItemCallback;
+    private DropdownDismissCallback mDismissCallback;
     private OnClickListener onPopupClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (popupWindow == null) initPopup(getContext());
+
+            popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+            popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
             popupWindow.showAsDropDown(tvTitle, 0, -1 * tvTitle.getHeight());
             if (mSelectedPosition >= 0) {
                 mAdapter.setSelected(mSelectedPosition);
             }
         }
     };
+
 
     public CustomSpinner(Context context) {
         this(context, null);
@@ -69,9 +76,13 @@ public class CustomSpinner extends RelativeLayout {
         this.mItemCallback = mItemCallback;
     }
 
+    public void setDropdownDismissCallback(DropdownDismissCallback mDismissCallback) {
+        this.mDismissCallback = mDismissCallback;
+    }
+
     private void init(final Context context) {
         inflate(context, R.layout.custom_spinner, this);
-        tvTitle = findViewById(R.id.tv_title);
+        tvTitle = findViewById(R.id.textTitle);
         ivExpand = findViewById(R.id.iv_expand);
 
         tvTitle.setText(titleText);
@@ -103,7 +114,7 @@ public class CustomSpinner extends RelativeLayout {
     private void initPopup(Context context) {
         popupWindow = new PopupWindow(context);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.dropdown, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dropdown, this, false);
 
         mAdapter = new RecyclerViewAdapter(context);
         mAdapter.setSelectedColor(selectedColor);
@@ -112,7 +123,9 @@ public class CustomSpinner extends RelativeLayout {
         mAdapter.setCallback(new RecyclerViewAdapter.ItemCallback() {
             @Override
             public void onItemClicked(int position, String value) {
-                if (popupWindow.isShowing()) popupWindow.dismiss();
+                if (popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                }
                 tvTitle.setText(value);
                 mSelectedPosition = position;
                 if (mItemCallback != null) {
@@ -131,6 +144,12 @@ public class CustomSpinner extends RelativeLayout {
 
         popupWindow.setContentView(view);
         popupWindow.setOutsideTouchable(true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (mDismissCallback != null) mDismissCallback.onPopupDismiss();
+            }
+        });
     }
 
     public void setTitleText(String titleText) {
@@ -156,4 +175,7 @@ public class CustomSpinner extends RelativeLayout {
         void onItemSelected(int position, String value);
     }
 
+    public interface DropdownDismissCallback {
+        void onPopupDismiss();
+    }
 }
